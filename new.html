@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chimayó — Stone Fired Kitchen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0a09; --ash:#1c1917; --ember:#ea580c; --ember-glow:#fb923c;
+    --cream:#f5f1e8; --muted:#a8a29e; --line:rgba(245,241,232,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--cream);font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  .container{max-width:1280px;margin:0 auto;padding:0 24px}
+  .mono{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+  .display{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.01em;line-height:.95}
+  .ember{color:var(--ember)}
+  /* NAV */
+  nav.top{position:fixed;top:0;left:0;right:0;z-index:50;backdrop-filter:blur(16px);background:rgba(12,10,9,.7);border-bottom:1px solid var(--line)}
+  nav.top .inner{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;max-width:1280px;margin:0 auto}
+  nav.top .logo{font-family:'Anton',sans-serif;font-size:22px;letter-spacing:.08em}
+  nav.top .logo span{color:var(--ember)}
+  nav.top ul{display:flex;gap:28px;list-style:none}
+  nav.top ul a{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:color .3s}
+  nav.top ul a:hover{color:var(--cream)}
+  .btn{display:inline-block;padding:12px 24px;border-radius:999px;font-size:12px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;transition:all .3s;cursor:pointer;border:none;font-family:inherit}
+  .btn-primary{background:var(--ember);color:#0c0a09}
+  .btn-primary:hover{background:var(--ember-glow);transform:translateY(-2px);box-shadow:0 12px 32px rgba(234,88,12,.4)}
+  .btn-ghost{border:1px solid var(--line);color:var(--cream);background:transparent}
+  .btn-ghost:hover{border-color:var(--ember);color:var(--ember)}
+  @media(max-width:768px){nav.top ul{display:none}}
+
+  /* HERO */
+  .hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:120px 0 80px}
+  .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 70% 40%,rgba(234,88,12,.18),transparent 60%);pointer-events:none}
+  .hero .grid{display:grid;grid-template-columns:1.2fr 1fr;gap:60px;align-items:center;position:relative;z-index:2}
+  .hero h1{font-size:clamp(56px,9vw,140px)}
+  .hero h1 span{color:var(--ember);display:block}
+  .hero p.lead{margin-top:28px;max-width:520px;color:var(--muted);font-size:17px}
+  .hero .cta{margin-top:36px;display:flex;gap:14px;flex-wrap:wrap}
+  .hero-dish{position:relative;aspect-ratio:1;border-radius:50%;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 80px rgba(234,88,12,.3);animation:float 6s ease-in-out infinite}
+  .hero-dish img{width:100%;height:100%;object-fit:cover}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+  @media(max-width:900px){.hero .grid{grid-template-columns:1fr}.hero-dish{max-width:380px;margin:0 auto}}
+
+  /* SECTIONS */
+  section{padding:100px 0;border-top:1px solid var(--line)}
+  .section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:48px;gap:24px;flex-wrap:wrap}
+  .section-head h2{font-family:'Anton',sans-serif;font-size:clamp(40px,6vw,80px);text-transform:uppercase;line-height:1}
+  .section-head p{color:var(--muted);max-width:380px}
+
+  /* FILTER */
+  .filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:36px}
+  .filter{padding:8px 18px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+  .filter:hover{color:var(--cream)}
+  .filter.active{background:var(--ember);color:#0c0a09;border-color:var(--ember)}
+
+  /* MENU GRID */
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+  .card{position:relative;border-radius:20px;overflow:hidden;background:var(--ash);border:1px solid var(--line);cursor:pointer;transition:transform .4s,box-shadow .4s}
+  .card:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 0 1px rgba(234,88,12,.3)}
+  .card .img{aspect-ratio:4/3;overflow:hidden}
+  .card .img img{width:100%;height:100%;object-fit:cover;transition:transform .8s}
+  .card:hover .img img{transform:scale(1.08)}
+  .card .body{padding:20px}
+  .card .row{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:8px}
+  .card h3{font-family:'Anton',sans-serif;font-size:22px;letter-spacing:.02em;text-transform:uppercase}
+  .card .price{font-family:'JetBrains Mono',monospace;color:var(--ember);font-weight:600}
+  .card .desc{color:var(--muted);font-size:14px;line-height:1.5}
+  .card .tags{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:rgba(234,88,12,.12);color:var(--ember-glow)}
+
+  /* DETAIL MODAL */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+  .modal.open{display:flex}
+  .modal-card{background:var(--ash);border-radius:24px;max-width:560px;width:100%;overflow:hidden;border:1px solid var(--line);max-height:90vh;overflow-y:auto;animation:slideUp .4s ease}
+  @keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .modal-card .img{aspect-ratio:16/10;overflow:hidden}
+  .modal-card .img img{width:100%;height:100%;object-fit:cover}
+  .modal-card .body{padding:28px}
+  .modal-card h3{font-family:'Anton',sans-serif;font-size:36px;text-transform:uppercase;margin-bottom:6px}
+  .modal-card .price{font-family:'JetBrains Mono',monospace;color:var(--ember);font-size:20px;margin-bottom:16px}
+  .modal-card .desc{color:var(--muted);margin-bottom:20px}
+  .close{position:absolute;top:20px;right:20px;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.6);border:1px solid var(--line);color:var(--cream);cursor:pointer;font-size:18px;z-index:2}
+
+  /* ABOUT */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+  .about-grid img{border-radius:24px;aspect-ratio:4/5;object-fit:cover}
+  .timeline{margin-top:32px;display:flex;flex-direction:column;gap:18px}
+  .timeline .item{display:flex;gap:18px;padding:16px 0;border-top:1px solid var(--line)}
+  .timeline .yr{font-family:'Anton',sans-serif;color:var(--ember);font-size:24px;min-width:80px}
+  @media(max-width:900px){.about-grid{grid-template-columns:1fr}}
+
+  /* CONTACT */
+  .contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:40px}
+  .info{padding:28px;border-radius:20px;background:var(--ash);border:1px solid var(--line)}
+  .info h4{font-family:'Anton',sans-serif;font-size:18px;text-transform:uppercase;margin-bottom:8px;color:var(--ember)}
+  .info p{color:var(--muted);font-size:14px}
+  @media(max-width:768px){.contact-grid{grid-template-columns:1fr}}
+
+  /* RESERVE FORM */
+  .form{max-width:680px;margin:0 auto;background:var(--ash);padding:40px;border-radius:24px;border:1px solid var(--line)}
+  .form .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .field{margin-bottom:18px}
+  .field label{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .field input,.field select,.field textarea{width:100%;padding:14px 16px;background:var(--bg);border:1px solid var(--line);border-radius:12px;color:var(--cream);font-family:inherit;font-size:15px;transition:border-color .3s}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--ember)}
+  .form .btn{width:100%;padding:16px;font-size:13px;margin-top:8px}
+  .success{text-align:center;padding:40px;color:var(--ember-glow)}
+  @media(max-width:600px){.form .row2{grid-template-columns:1fr}.form{padding:24px}}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--line);padding:60px 0 40px;margin-top:40px}
+  footer .grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;margin-bottom:40px}
+  footer h5{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.05em;margin-bottom:16px}
+  footer a{display:block;color:var(--muted);font-size:14px;padding:4px 0;transition:color .2s}
+  footer a:hover{color:var(--ember)}
+  footer .copy{padding-top:30px;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:13px}
+  @media(max-width:768px){footer .grid{grid-template-columns:1fr}}
+
+  /* fade-in */
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}
+  .reveal.in{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="inner">
+    <a href="#home" class="logo">CHIMAY<span>Ó</span></a>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#reserve" class="btn btn-primary">Reserve</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header id="home" class="hero">
+  <div class="container">
+    <div class="grid">
+      <div>
+        <p class="mono">Est. 1972 · Durango, CO</p>
+        <h1 class="display" style="margin-top:20px">Stone <span>Fired</span> Kitchen</h1>
+        <p class="lead">A fire-driven kitchen rooted in northern New Mexican tradition. Mesquite embers, heirloom corn, smoked chiles — plated with editorial precision.</p>
+        <div class="cta">
+          <a href="#reserve" class="btn btn-primary">Reserve a Table</a>
+          <a href="#menu" class="btn btn-ghost">Explore Menu</a>
+        </div>
+      </div>
+      <div class="hero-dish">
+        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=900&q=80" alt="Signature dish" />
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <p class="mono">The Menu</p>
+        <h2>From the <span class="ember">Ember</span></h2>
+      </div>
+      <p>Tap any dish to view ingredients, pairings, and chef's notes.</p>
+    </div>
+    <div class="filters" id="filters"></div>
+    <div class="menu-grid" id="menuGrid"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80" alt="Chimayó dining room" class="reveal" />
+      <div class="reveal">
+        <p class="mono">Our Story</p>
+        <h2 class="display" style="font-size:clamp(40px,5vw,64px);margin:16px 0">Five decades of <span class="ember">fire</span></h2>
+        <p style="color:var(--muted)">Founded by the Trujillo family in 1972, Chimayó has spent five decades translating the smoke, chile, and corn of northern New Mexico into a modern stone-fired kitchen. We mill our masa, smoke our chiles, and source from regenerative ranches within 200 miles of Durango.</p>
+        <div class="timeline">
+          <div class="item"><div class="yr">1972</div><div><strong>Doors open</strong><br><span style="color:var(--muted);font-size:14px">A six-table room on Main Avenue.</span></div></div>
+          <div class="item"><div class="yr">1998</div><div><strong>The hearth</strong><br><span style="color:var(--muted);font-size:14px">A custom stone oven becomes the kitchen's heart.</span></div></div>
+          <div class="item"><div class="yr">2019</div><div><strong>James Beard nod</strong><br><span style="color:var(--muted);font-size:14px">Recognized for regional American cuisine.</span></div></div>
+          <div class="item"><div class="yr">2024</div><div><strong>The new chapter</strong><br><span style="color:var(--muted);font-size:14px">Chef Mateo Trujillo takes the pass.</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <p class="mono">Find Us</p>
+        <h2>Visit the <span class="ember">House</span></h2>
+      </div>
+    </div>
+    <div class="contact-grid">
+      <div class="info"><h4>Address</h4><p>862 Main Avenue<br>Durango, CO 81301</p></div>
+      <div class="info"><h4>Hours</h4><p>Tue–Sun · 5pm – 10pm<br>Closed Mondays</p></div>
+      <div class="info"><h4>Contact</h4><p>(970) 259-2749<br>hello@chimayodurango.com</p></div>
+    </div>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3094.6!2d-107.880!3d37.275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0!2zRHVyYW5nbywgQ08!5e0!3m2!1sen!2sus!4v1700000000000" style="width:100%;height:360px;border:0;border-radius:20px;filter:invert(.9) hue-rotate(180deg)" loading="lazy"></iframe>
+  </div>
+</section>
+
+<!-- RESERVE -->
+<section id="reserve">
+  <div class="container">
+    <div class="section-head reveal" style="justify-content:center;text-align:center;flex-direction:column;align-items:center">
+      <p class="mono">Reservations</p>
+      <h2>Reserve a <span class="ember">Table</span></h2>
+      <p>Tell us when, who, and what we're celebrating.</p>
+    </div>
+    <form class="form" id="resForm">
+      <div class="row2">
+        <div class="field"><label>Full Name</label><input required type="text" name="name" /></div>
+        <div class="field"><label>Phone</label><input required type="tel" name="phone" /></div>
+      </div>
+      <div class="field"><label>Email</label><input required type="email" name="email" /></div>
+      <div class="row2">
+        <div class="field"><label>Date</label><input required type="date" name="date" /></div>
+        <div class="field"><label>Time</label>
+          <select required name="time">
+            <option value="">Select…</option>
+            <option>5:00 PM</option><option>5:30 PM</option><option>6:00 PM</option>
+            <option>6:30 PM</option><option>7:00 PM</option><option>7:30 PM</option>
+            <option>8:00 PM</option><option>8:30 PM</option><option>9:00 PM</option>
+          </select>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Guests</label>
+          <select required name="guests">
+            <option value="">How many?</option>
+            <option>1</option><option>2</option><option>3</option><option>4</option>
+            <option>5</option><option>6</option><option>7</option><option>8+</option>
+          </select>
+        </div>
+        <div class="field"><label>Occasion</label>
+          <select name="occasion">
+            <option value="">Optional</option>
+            <option>Anniversary</option><option>Birthday</option>
+            <option>Business</option><option>Date Night</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Special Requests</label><textarea name="notes" rows="3" placeholder="Allergies, accessibility, seating preferences…"></textarea></div>
+      <button type="submit" class="btn btn-primary">Request Reservation</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="grid">
+      <div>
+        <div class="logo" style="font-family:'Anton',sans-serif;font-size:28px;letter-spacing:.08em">CHIMAY<span style="color:var(--ember)">Ó</span></div>
+        <p style="color:var(--muted);margin-top:14px;max-width:340px">Stone fired kitchen rooted in northern New Mexican tradition. Durango, Colorado.</p>
+      </div>
+      <div><h5>Visit</h5><a href="#contact">Address</a><a href="#contact">Hours</a><a href="#reserve">Reserve</a></div>
+      <div><h5>Explore</h5><a href="#menu">Menu</a><a href="#about">About</a><a href="#contact">Contact</a></div>
+    </div>
+    <div class="copy">© 2026 Chimayó Restaurant · Durango, CO</div>
+  </div>
+</footer>
+
+<!-- DETAIL MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-card" style="position:relative">
+    <button class="close" onclick="closeModal()">×</button>
+    <div class="img"><img id="mImg" src="" alt="" /></div>
+    <div class="body">
+      <p class="mono" id="mCat"></p>
+      <h3 id="mName" style="margin-top:8px"></h3>
+      <div class="price" id="mPrice"></div>
+      <p class="desc" id="mDesc"></p>
+      <div class="tags" id="mTags"></div>
+      <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--line)">
+        <p class="mono" style="margin-bottom:8px">Chef's Pairing</p>
+        <p style="color:var(--muted);font-size:14px" id="mPair"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const u = id => `https://images.unsplash.com/photo-${id}?w=800&q=80`;
+const menu = [
+  {cat:'Starters',name:'Charred Octopus',price:'24',img:u('1559847844-5315695dadae'),desc:'Mesquite-charred tentacle, smoked paprika aioli, pickled fresno chiles, crispy chickpeas.',tags:['Gluten Free','Smoky'],pair:'Mezcal Negroni'},
+  {cat:'Starters',name:'Heirloom Tomato Salad',price:'18',img:u('1540420773420-3366772f4999'),desc:'Compressed melon, basil oil, burrata, espelette, aged sherry vinegar.',tags:['Vegetarian','Seasonal'],pair:'Albariño'},
+  {cat:'Starters',name:'Blue Corn Tostada',price:'16',img:u('1551782450-a2132b4ba21d'),desc:'Hand-pressed blue corn, ahi tuna, avocado mousse, micro cilantro.',tags:['Raw','Signature'],pair:'Reposado Margarita'},
+  {cat:'Mains',name:'48-Hour Short Rib',price:'46',img:u('1544025162-d76694265947'),desc:'Red chile braise, masa pomme purée, charred scallion, beef jus.',tags:['Gluten Free','Hearty'],pair:'Malbec Reserva'},
+  {cat:'Mains',name:'Wood-Fired Branzino',price:'42',img:u('1519708227418-c8fd9a32b7a2'),desc:'Whole fish, salsa verde cruda, charred lemon, fingerling potatoes.',tags:['Pescatarian'],pair:'Verdejo'},
+  {cat:'Mains',name:'Hatch Chile Mole',price:'38',img:u('1565299624946-b28f40a0ae38'),desc:'Slow-braised heritage pork, 32-ingredient mole negro, sesame, pickled onions.',tags:['Signature','Spicy'],pair:'Pinot Noir'},
+  {cat:'Mains',name:'Mushroom Cazuela',price:'32',img:u('1567620832903-9fc6debc209f'),desc:'Wood-roasted maitake, hominy, salsa macha, smoked queso fresco.',tags:['Vegetarian','Smoky'],pair:'Orange Wine'},
+  {cat:'Desserts',name:'Mezcal Flan',price:'14',img:u('1551024506-0bccd828d307'),desc:'Burnt sugar, oaxacan mezcal, smoked sea salt, cocoa nib tuile.',tags:['Signature'],pair:'Café de Olla'},
+  {cat:'Desserts',name:'Tres Leches',price:'12',img:u('1488477181946-6428a0291777'),desc:'Vanilla bean sponge, three milks, charred pineapple, cinnamon foam.',tags:['Classic'],pair:'Sauternes'},
+  {cat:'Drinks',name:'Smoked Old Fashioned',price:'18',img:u('1551538827-9c037cb4f32a'),desc:'Mesquite-smoked bourbon, mole bitters, brûléed orange.',tags:['Signature','Smoky'],pair:'After dinner'},
+  {cat:'Drinks',name:'Hibiscus Agua Fresca',price:'8',img:u('1556679343-c7306c1976bc'),desc:'Cold-steeped jamaica, lime, agave, salted rim.',tags:['Non-Alcoholic'],pair:'Anytime'},
+  {cat:'Drinks',name:'Mezcal Paloma',price:'16',img:u('1514362545857-3bc16c4c7d1b'),desc:'Joven mezcal, grapefruit, lime, chile-salt rim.',tags:['Smoky'],pair:'Starters'},
+];
+
+const cats = ['All', ...new Set(menu.map(m=>m.cat))];
+const filtersEl = document.getElementById('filters');
+const gridEl = document.getElementById('menuGrid');
+let active = 'All';
+
+function render(){
+  filtersEl.innerHTML = cats.map(c=>`<button class="filter ${c===active?'active':''}" data-c="${c}">${c}</button>`).join('');
+  gridEl.innerHTML = menu.filter(m=>active==='All'||m.cat===active).map((m,i)=>`
+    <article class="card reveal" data-i="${menu.indexOf(m)}">
+      <div class="img"><img src="${m.img}" alt="${m.name}" loading="lazy"/></div>
+      <div class="body">
+        <div class="row"><h3>${m.name}</h3><div class="price">$${m.price}</div></div>
+        <p class="desc">${m.desc}</p>
+        <div class="tags">${m.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      </div>
+    </article>`).join('');
+  document.querySelectorAll('.filter').forEach(b=>b.onclick=()=>{active=b.dataset.c;render();observe();});
+  document.querySelectorAll('.card').forEach(c=>c.onclick=()=>openModal(menu[+c.dataset.i]));
+}
+function openModal(d){
+  document.getElementById('mImg').src=d.img;
+  document.getElementById('mCat').textContent=d.cat;
+  document.getElementById('mName').textContent=d.name;
+  document.getElementById('mPrice').textContent='$'+d.price;
+  document.getElementById('mDesc').textContent=d.desc;
+  document.getElementById('mTags').innerHTML=d.tags.map(t=>`<span class="tag">${t}</span>`).join('');
+  document.getElementById('mPair').textContent=d.pair;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
+
+document.getElementById('resForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const f=e.target;
+  f.innerHTML=`<div class="success"><h3 class="display" style="font-size:40px;color:var(--ember)">Confirmed</h3><p style="margin-top:12px;color:var(--muted)">We've received your request. A confirmation will arrive shortly at your email.</p></div>`;
+});
+
+// reveal on scroll
+function observe(){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+}
+render();observe();
+</script>
+</body>
+</html>
